@@ -1,0 +1,7 @@
+const pageBlockQueeries =
+  '_type=="listobject" => {_type, asset, listicles[]{title, year, listicleLink, linkTarget{url, project->{slug}, type}}, title}, _type=="image" => {_type, asset, image{alt, type, asset->{_id,url}, hotspot}}, _type=="video"=>{_type, cover, url, title, description},_type=="row"=>{_type, rowContent[]{customImage, image, content, readmorecontent, type, gallery}},_type =="connectedCollaborators" =>{_type, heading, category[]->{_id, title}, collaborators[]->{_type, year, time, place, slug, color, source,description, title, mainImage, url, buttons,categories[]->{title, slug}, tags}, type},_type =="connectedPress" =>{_type, heading, category[]->{_id, title}, pressOccurances[]->{_type, year, time, place, source,description, title, mainImage, url, buttons,categories[]->{title, slug}, tags}, type}, _type == "ticker" => {_type, showTicker, color}, _type == "hero" => { _type, heading, tagline, image{alt, type, asset->{_id,url}, hotspot}}, _type == "gallery" => { _type, heading,images}, _type == "customImage" => { _type, customImage{asset, hotspot, imageDescription}}, _type == "sortedProjects" => { _type, heading,categories}, _type == "breadContent" => { _type, heading, content, readmorecontent, type}, _type == "connectedProjects" => {_type, canBeSorted, category, heading,type, projects[]->{title, year, description, tags, categories[]->{title, slug, color}, buttons, time, place, slug, logoImage, mainImage, heroImage}}';
+export const pageBuilderquerystring = `pageBuilder[]{${pageBlockQueeries}}`;
+
+// {
+//   url, project;
+// }
