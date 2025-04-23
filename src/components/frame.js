@@ -15,6 +15,7 @@ const Frame = () => {
     if (frameSvgs.length === 0) return null;
     const index = Math.floor(Math.random() * frameSvgs.length);
     return frameSvgs[index];
+    // eslint-disable-next-line
   }, []);
 
   if (!randomSvg) return null;
@@ -69,6 +70,7 @@ export const Detail = () => {
     if (detailSvgs.length === 0) return null;
     const index = Math.floor(Math.random() * detailSvgs.length);
     return detailSvgs[index];
+    // eslint-disable-next-line
   }, []);
 
   const { x, y } = useMemo(() => {
@@ -80,10 +82,10 @@ export const Detail = () => {
     };
   }, []);
 
-  const size = useMemo(
-    () => (width > 786 ? 50 + Math.random() * 150 : 10 + Math.random() * 10),
-    []
-  );
+  const size = useMemo(() => {
+    return width > 786 ? 50 + Math.random() * 150 : 10 + Math.random() * 10;
+    // eslint-disable-next-line
+  }, []);
 
   if (!randomDetail) return null;
 
@@ -140,7 +142,8 @@ export const Stickers = ({ stickerArray }) => {
       });
 
     setStickers(selected);
-  }, [stickerArray]);
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <>

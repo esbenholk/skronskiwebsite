@@ -7,7 +7,7 @@ function Hero({ image, givenclassname }) {
 
   return (
     <div className="hero">
-      {givenclassname == "stretch" ? (
+      {givenclassname === "stretch" ? (
         <TapeImage
           image={image}
           height={width > 789 ? height - 60 : height - 30}

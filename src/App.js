@@ -25,9 +25,8 @@ function App() {
   const [tags, setTags] = useState([]);
   const [categories, setCategories] = useState([]);
   const mainRef = createRef();
-  const [categoryNames, setCategoryNames] = useState([]);
+
   const [pageTitle, setPageTitle] = useState();
-  const [stickerArray, setStickerArray] = useState([]);
 
   const updatePageTitle = (newTitle) => {
     setPageTitle(newTitle);
@@ -86,22 +85,22 @@ function App() {
       .then((data) => {
         data.sort((a, b) => b.year - a.year);
         setProjectList(data);
-        var categories = [];
-        var tempCategoryNames = [];
-        for (let index = 0; index < data.length; index++) {
-          const post = data[index];
-          if (post.categories != null && Array.isArray(post.categories)) {
-            for (let index = 0; index < post.categories.length; index++) {
-              const category = post.categories[index];
+        // var categories = [];
+        // var tempCategoryNames = [];
+        // for (let index = 0; index < data.length; index++) {
+        //   const post = data[index];
+        //   if (post.categories != null && Array.isArray(post.categories)) {
+        //     for (let index = 0; index < post.categories.length; index++) {
+        //       const category = post.categories[index];
 
-              if (!tempCategoryNames.includes(category.title)) {
-                tempCategoryNames.push(category.title);
-                categories.push(category);
-              }
-            }
-          }
-        }
-        setCategoryNames(tempCategoryNames);
+        //       if (!tempCategoryNames.includes(category.title)) {
+        //         tempCategoryNames.push(category.title);
+        //         categories.push(category);
+        //       }
+        //     }
+        //   }
+        // }
+        // setCategoryNames(tempCategoryNames);
       })
       .catch(console.error);
   }, []);

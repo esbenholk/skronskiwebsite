@@ -39,7 +39,13 @@ export default function LandingPage() {
         info.textcolor.hex
       );
     }
-  }, []);
+  }, [
+    info.backgroundImage,
+    info.maincolor,
+    info.textcolor,
+    info.title,
+    myContext,
+  ]);
 
   return (
     <div>

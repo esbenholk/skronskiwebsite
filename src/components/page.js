@@ -85,7 +85,14 @@ export default function SinglePage() {
         }
       })
       .catch(console.error);
-  }, [slug, searchParams]);
+  }, [
+    slug,
+    searchParams,
+    info.detailcolor.hex,
+    info.maincolor.hex,
+    info.textcolor.hex,
+    myContext,
+  ]);
 
   // if (!singlePage) return <Loader />;
 

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import BlockContent from "./blocks/BlockContent";
 import AppContext from "../globalState";
 import MenuItem from "./menuItem";

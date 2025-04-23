@@ -104,7 +104,6 @@ const MatterSimulation = ({ projects }) => {
         const img = new Image();
         img.src = src;
         img.onload = () => {
-          const naturalWidth = img.naturalWidth;
           const naturalHeight = img.naturalHeight;
 
           // Target: fill screen height while maintaining aspect ratio
@@ -244,14 +243,12 @@ const MatterSimulation = ({ projects }) => {
 
     render.canvas.addEventListener("dblclick", handleClick);
 
-    // Scroll-based movement for canvas-based image layers
-    let lastScrollY = window.scrollY;
     const scrollLayers = renderStack.filter(
       (b) => b.scrollFactor !== undefined
     );
 
     const handleScroll = () => {
-      lastScrollY = window.scrollY;
+      // let lastScrollY = window.scrollY;
       scrollLayers.forEach((layer) => {
         const { scrollFactor, initialPosition } = layer;
         Matter.Body.setPosition(layer, {
@@ -383,7 +380,15 @@ const MatterSimulation = ({ projects }) => {
       window.removeEventListener("deviceorientation", handleOrientation);
       window.removeEventListener("resize", handleResize);
     };
-  }, [projects]);
+  }, [
+    projects,
+    bodyTargetScale,
+    collageLayers,
+    height,
+    imageEntryDistance,
+    isMobile,
+    width,
+  ]);
 
   return (
     <>
