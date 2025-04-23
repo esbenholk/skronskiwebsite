@@ -380,15 +380,8 @@ const MatterSimulation = ({ projects }) => {
       window.removeEventListener("deviceorientation", handleOrientation);
       window.removeEventListener("resize", handleResize);
     };
-  }, [
-    projects,
-    bodyTargetScale,
-    collageLayers,
-    height,
-    imageEntryDistance,
-    isMobile,
-    width,
-  ]);
+    // eslint-disable-next-line
+  }, [projects, bodyTargetScale, height, imageEntryDistance, isMobile]);
 
   return (
     <>
