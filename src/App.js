@@ -9,6 +9,8 @@ import AppContext from "./globalState";
 
 import { AnimatePresence, motion } from "framer-motion";
 
+import useWindowDimensions from "./components/functions/useWindowDimensions.js";
+
 import { HeadTags } from "./components/blocks/helmetHeaderTags";
 import { GlobalPopupManager } from "./components/popUpHandler.js";
 import CustomCursor from "./components/customCursor.js";
@@ -29,6 +31,7 @@ function App() {
 
   const [pageTitle, setPageTitle] = useState();
 
+  const { width } = useWindowDimensions();
   const updatePageTitle = (newTitle) => {
     setPageTitle(newTitle);
   };
@@ -145,14 +148,15 @@ function App() {
                   siteSettings.popupsarray.length > 0 && (
                     <GlobalPopupManager popups={siteSettings.popupsarray} />
                   )}
-
-                <CustomCursor
-                  animateOnClasses={[
-                    "standard-button",
-                    "thumbnail",
-                    "menu-image-peek",
-                  ]}
-                />
+                {width > 786 && (
+                  <CustomCursor
+                    animateOnClasses={[
+                      "standard-button",
+                      "thumbnail",
+                      "menu-image-peek",
+                    ]}
+                  />
+                )}
 
                 {/* Main content + transitions */}
                 <main className="main-content">
