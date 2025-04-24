@@ -918,6 +918,7 @@ img {
 }
 .hoverSquare p {
   color: inherit;
+  pointer-events: none;
 }
 .hoverSquare p:first-child {
   position: absolute;
@@ -935,6 +936,7 @@ img {
   margin: 5px;
   color: inherit;
   font-size: 0.75rem !important;
+  pointer-events: none;
 }
 .tooltip.active {
   width: 40px;

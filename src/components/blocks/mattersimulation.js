@@ -487,7 +487,7 @@ const MatterSimulation = ({ projects }) => {
           <p>doubletap to see</p>
         </div>
       )}
-      {grabbedBody && (
+      {grabbedBody && width < 786 && (
         <div
           className={
             tooltipScreenPos.x < width - 50 ? "tooltip" : "tooltip active"
