@@ -65,6 +65,9 @@ a {
   transform: translate(-50%, -50%);
   transition: all 0.05s linear;
   z-index: 9999999999;
+  filter: brightness(1.5) saturate(150%) contrast(200%)
+    drop-shadow(0 0 4px var(--detail-color));
+  mix-blend-mode: exclusion; /* Blends cursor with background */
 }
 .custom-cursor svg {
   width: 100%;
@@ -75,9 +78,6 @@ a {
 
 .custom-cursor.rotate {
   animation: spin 1s linear infinite;
-  filter: brightness(1.5) saturate(150%) contrast(200%)
-    drop-shadow(0 0 4px var(--detail-color));
-  mix-blend-mode: exclusion; /* Blends cursor with background */
 }
 
 @keyframes spin {
@@ -225,7 +225,7 @@ iframe {
 }
 
 .projectInfoContent {
-  margin: calc(var(--regMargin) * 2);
+  margin: calc(var(--regMargin) * 1);
 }
 .blockContent {
   margin: var(--regMargin);
@@ -238,6 +238,11 @@ iframe {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  white-space: wrap;
+}
+.projectInfoContent h1 {
+  word-wrap: break-word;
+  max-width: 80%;
 }
 .block {
   position: relative;
@@ -634,6 +639,10 @@ img {
     max-width: none;
     object-fit: contain;
   }
+  .projectInfoContent h1 {
+    word-wrap: break-word;
+    font-size: 1.25rem;
+  }
 }
 
 .app-container {
@@ -807,11 +816,19 @@ img {
     min-height: 100px;
   }
 
-  .hero,
   .simulationContainer {
     margin: calc(var(--regMargin) * 1);
     position: relative;
     max-width: calc(100% - calc(var(--regMargin) * 1));
+    /* border: 2px solid var(--text-color);
+  height: fit-content; */
+  }
+
+  .hero {
+    /* margin: calc(var(--regMargin) * 1);
+    position: relative; */
+    width: 100%;
+    /* max-width: calc(100% - calc(var(--regMargin) * 1)); */
     /* border: 2px solid var(--text-color);
   height: fit-content; */
   }

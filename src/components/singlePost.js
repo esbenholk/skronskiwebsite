@@ -11,7 +11,7 @@ import Hero from "./blocks/hero";
 
 import { Stickers } from "./frame";
 
-export default function SinglePost({ updatePageTitle }) {
+export default function SinglePost() {
   const { slug } = useParams();
   const [project, setProject] = useState();
 
@@ -91,7 +91,7 @@ export default function SinglePost({ updatePageTitle }) {
       .catch(console.error);
   }, [
     slug,
-    updatePageTitle,
+    myContext.updatePageTitle,
     info.detailcolor.hex,
     projectList,
     info.maincolor.hex,

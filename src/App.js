@@ -17,6 +17,7 @@ const LandingPage = lazy(() => import("./components/LandingPage.js"));
 const SinglePost = lazy(() => import("./components/singlePost.js"));
 const SinglePage = lazy(() => import("./components/page.js"));
 const Footer = lazy(() => import("./components/Footer.js"));
+const ProjectPage = lazy(() => import("./components/projectPage.js"));
 
 function App() {
   const [siteSettings, setSiteSettings] = useState();
@@ -193,15 +194,15 @@ const routes = [
       </>
     ),
   },
-  // {
-  //   path: "/projects",
-  //   element: (
-  //     <>
-  //       <div className="background"></div>
-  //       <Projects />
-  //     </>
-  //   ),
-  // },
+  {
+    path: "/projects",
+    element: (
+      <>
+        <div className="background"></div>
+        <ProjectPage />
+      </>
+    ),
+  },
   {
     path: "/:slug",
     element: (

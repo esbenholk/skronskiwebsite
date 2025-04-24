@@ -139,7 +139,7 @@ function AnimatedPageBlock({ pageBlock, rotate, isLeft }) {
       controls.start({
         x: 0,
         opacity: 1,
-        transition: { duration: 0.8, ease: "easeOut" },
+        transition: { duration: 0.2, ease: "easeOut" },
       });
     }
   }, [controls, inView, rotate]);
@@ -148,7 +148,7 @@ function AnimatedPageBlock({ pageBlock, rotate, isLeft }) {
     <motion.div
       ref={ref}
       className="pageBlockItem"
-      initial={{ x: isLeft ? -100 : 100, opacity: 1, rotate: 0 }}
+      initial={{ x: isLeft ? -100 : 100, opacity: 0, rotate: 0 }}
       animate={controls}
     >
       <PageBlock pageBlock={pageBlock} />
