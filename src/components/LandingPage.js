@@ -39,10 +39,17 @@ export default function LandingPage() {
         info.textcolor.hex
       );
     }
+    if (info.detailcolor) {
+      document.documentElement.style.setProperty(
+        "--detail-color",
+        info.detailcolor.hex
+      );
+    }
   }, [
     info.backgroundImage,
     info.maincolor,
     info.textcolor,
+    info.detailcolor,
     info.title,
     myContext,
   ]);
@@ -50,9 +57,7 @@ export default function LandingPage() {
   return (
     <div>
       <div className="simulationContainer">
-        <div className="tape-section"></div>
         {projectList && <MatterSimulation projects={projectList} />}
-        <div className="tape-section"></div>
       </div>
 
       <div className="pageContainer">

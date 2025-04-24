@@ -11,9 +11,9 @@ export default function Header({ pageName }) {
   return (
     <>
       {/* <div className="title standard-button">
-        <div className="tape-section"></div>
+         
         <p>{pageName}</p>
-        <div className="tape-section"></div>
+         
       </div> */}
       {myContext && myContext.siteSettings.headerMenu && (
         <SketchyMenu items={myContext.siteSettings.headerMenu} />

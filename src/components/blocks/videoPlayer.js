@@ -3,7 +3,7 @@ import urlFor from "../functions/urlFor";
 
 import ReactPlayer from "react-player";
 
-const VideoPlayer = ({ url, thumbnail, description }) => {
+const VideoPlayer = ({ url, thumbnail }) => {
   const [playing, setPlaying] = useState(false);
   const playerRef = useRef(null);
 
@@ -53,7 +53,7 @@ const VideoPlayer = ({ url, thumbnail, description }) => {
           onPlay={handlePlay}
           onPause={handlePause}
         />
-        {!playing && (
+        {!playing && thumbnail != null && (
           <div
             onClick={() => setPlaying(true)}
             style={{

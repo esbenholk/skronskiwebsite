@@ -123,7 +123,6 @@ export default function SinglePost() {
 
           <div className="pageContainer">
             <div className="realpaper projectInfo">
-              <div className="tape-section"></div>
               <div className="projectInfoContent">
                 <div>
                   <h1>{project.title}</h1>
@@ -132,8 +131,6 @@ export default function SinglePost() {
                 <p>{project.location}</p>
                 <p>{project.subtitle}</p>
               </div>
-
-              <div className="tape-section"></div>
             </div>
             {project.pageBuilder && (
               <PageBuilder pageBuilder={project.pageBuilder} />

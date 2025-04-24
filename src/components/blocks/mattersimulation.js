@@ -14,6 +14,12 @@ export function urlFor(source) {
 // const imageUrl = urlFor(project.mainImage.asset).width(200).url();
 
 const MatterSimulation = ({ projects }) => {
+  const [hoveredBody, setHoveredBody] = useState(null);
+  const [hoverPosition, setHoverPosition] = useState({ x: 0, y: 0 });
+  const [tooltipScreenPos, setTooltipScreenPos] = useState({ x: 0, y: 0 });
+  const [grabbedBody, setGrabbedBody] = useState(null);
+  const [grabbedStartX, setGrabbedStartX] = useState(null);
+
   const sceneRef = useRef(null);
   const engineRef = useRef(Matter.Engine.create({ gravity: { y: 0.1 } }));
   const renderRef = useRef(null);
@@ -46,6 +52,7 @@ const MatterSimulation = ({ projects }) => {
       p.stickerarray.map((img) => ({
         imageUrl: urlFor(img.asset).width(300).url(),
         projectUrl: `/projects/${p.slug.current}`,
+        title: p.title,
       }))
     );
 
@@ -123,8 +130,9 @@ const MatterSimulation = ({ projects }) => {
     const groupedBodies = Array.from({ length: totalGroups }, () => []);
     const allBodies = [];
     let repeatedStickers;
+
     if (allStickers.length < 15 && isMobile) {
-      const totalBodies = 40;
+      const totalBodies = 30;
       const repeatCount = Math.ceil(totalBodies / projects.length);
       repeatedStickers = Array.from({ length: repeatCount }, () => allStickers)
         .flat()
@@ -133,7 +141,7 @@ const MatterSimulation = ({ projects }) => {
       repeatedStickers = allStickers;
     }
 
-    const baseSize = isMobile ? 30 : 100;
+    const baseSize = isMobile ? 30 : 80;
     const bodies = repeatedStickers.map((sticker, i) => {
       const imageUrl = sticker.imageUrl;
       const groupIndex = i % totalGroups;
@@ -173,6 +181,7 @@ const MatterSimulation = ({ projects }) => {
       body.render.sprite.yScale = body.baseSpriteScale;
 
       body.projectUrl = sticker.projectUrl;
+      body.title = sticker.title;
       groupedBodies[groupIndex].push(body);
       allBodies.push(body);
       return body;
@@ -231,6 +240,46 @@ const MatterSimulation = ({ projects }) => {
       "wheel",
       mouseConstraint.mouse.mousewheel
     );
+
+    Matter.Events.on(mouseConstraint, "startdrag", (event) => {
+      const body = event.body;
+      if (body && body.projectUrl) {
+        setGrabbedBody(body);
+        setGrabbedStartX(body.position.x);
+
+        const updateTooltipPos = () => {
+          const { x, y } = body.position;
+          setTooltipScreenPos({ x, y });
+        };
+
+        Matter.Events.on(engine, "afterUpdate", updateTooltipPos);
+
+        // Save cleanup function to detach later
+        body._tooltipCleanup = () => {
+          Matter.Events.off(engine, "afterUpdate", updateTooltipPos);
+        };
+      }
+    });
+
+    Matter.Events.on(mouseConstraint, "enddrag", (event) => {
+      const body = event.body;
+      if (body && body._tooltipCleanup) {
+        body._tooltipCleanup(); // clean up listener
+        delete body._tooltipCleanup;
+      }
+
+      if (body && body.projectUrl) {
+        const dropX = body.position.x;
+        const rightEdge = width - 50;
+        const travel = Math.abs(body.position.x - grabbedStartX);
+        if (dropX >= rightEdge && travel > 40) {
+          window.location = body.projectUrl;
+        }
+      }
+
+      setGrabbedBody(null);
+      setGrabbedStartX(null);
+    });
 
     const handleClick = (e) => {
       const { x, y } = mouse.position;
@@ -319,6 +368,31 @@ const MatterSimulation = ({ projects }) => {
 
     window.addEventListener("resize", handleResize);
 
+    const handleMouseMove = (event) => {
+      const { x, y } = mouse.position;
+      const found = Matter.Query.point(allBodies, { x, y });
+
+      if (found.length > 0) {
+        setHoveredBody(found[0]);
+        setHoverPosition({ x, y });
+        found[0].render.lineWidth = 4;
+        found[0].render.strokeStyle = "#fff";
+        // allBodies.forEach((body) => {
+        //   if (body === found[0]) {
+        //     body.render.opacity = 1;
+
+        //   } else {
+        //     body.render.opacity = 0.9;
+        //     body.render.lineWidth = 0;
+        //   }
+        // });
+      } else {
+        setHoveredBody(null);
+      }
+    };
+
+    render.canvas.addEventListener("mousemove", handleMouseMove);
+
     Matter.Events.on(engine, "beforeUpdate", () => {
       const now = Date.now();
 
@@ -379,6 +453,7 @@ const MatterSimulation = ({ projects }) => {
       render.textures = {};
       window.removeEventListener("deviceorientation", handleOrientation);
       window.removeEventListener("resize", handleResize);
+      render.canvas.removeEventListener("mousemove", handleMouseMove);
     };
     // eslint-disable-next-line
   }, [projects, bodyTargetScale, height, imageEntryDistance, isMobile]);
@@ -399,6 +474,39 @@ const MatterSimulation = ({ projects }) => {
             ")",
         }}
       />
+      {hoveredBody && (
+        <div
+          style={{
+            position: "fixed",
+            left: hoverPosition.x,
+            top: hoverPosition.y,
+          }}
+          className="hoverSquare"
+        >
+          <p>{hoveredBody.title}</p>
+          <p>doubletap to see</p>
+        </div>
+      )}
+      {grabbedBody && (
+        <div
+          className={
+            tooltipScreenPos.x < width - 50 ? "tooltip" : "tooltip active"
+          }
+          style={{
+            position: "fixed",
+            left: tooltipScreenPos.x,
+            top: tooltipScreenPos.y,
+
+            zIndex: 1000,
+          }}
+        >
+          <p>
+            {tooltipScreenPos.x < width - 50
+              ? "drag to right to see"
+              : "yes here "}
+          </p>
+        </div>
+      )}
     </>
   );
 };

@@ -37,7 +37,6 @@ function PageBlock({ pageBlock }) {
 
       {pageBlock._type === "listobject" && (
         <div className="cvblock textblock">
-          <div className="tape-section"></div>
           <h3>{pageBlock.title}</h3>
           {pageBlock.listicles.map((listicle, i) => {
             return (
@@ -74,7 +73,6 @@ function PageBlock({ pageBlock }) {
               </div>
             );
           })}
-          <div className="tape-section"></div>
         </div>
       )}
 
@@ -82,10 +80,8 @@ function PageBlock({ pageBlock }) {
         <>
           {pageBlock.content && (
             <div className="realpaper textblock">
-              <div className="tape-section"></div>
               <BlockContent blocks={pageBlock.content} />
               <Detail />
-              <div className="tape-section"></div>
             </div>
           )}
         </>
@@ -95,11 +91,7 @@ function PageBlock({ pageBlock }) {
         <>
           <h1>{pageBlock.title}</h1>
           <div className="block">
-            <div className="tape-section"></div>
-
             <Video url={pageBlock.url} thumbnail={pageBlock.cover} />
-
-            <div className="tape-section"></div>
           </div>
           {pageBlock.description && (
             <motion.div className="video-info">
@@ -148,7 +140,7 @@ function AnimatedPageBlock({ pageBlock, rotate, isLeft }) {
     <motion.div
       ref={ref}
       className="pageBlockItem"
-      initial={{ x: isLeft ? -100 : 100, opacity: 0, rotate: 0 }}
+      // initial={{ x: isLeft ? -100 : 100, opacity: 0, rotate: 0 }}
       animate={controls}
     >
       <PageBlock pageBlock={pageBlock} />

@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import sanityClient from "../../client";
 import imageUrlBuilder from "@sanity/image-url";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -102,8 +102,6 @@ export function TapeImage(props) {
             : null,
       }}
     >
-      <div className="tape-section"></div>
-
       {image && (
         <>
           <LazyLoadImage
@@ -140,7 +138,6 @@ export function TapeImage(props) {
           {!isLoaded && <div className="lazy-image-skeleton" />}
         </>
       )}
-      <div className="tape-section"></div>
     </div>
   );
 }
