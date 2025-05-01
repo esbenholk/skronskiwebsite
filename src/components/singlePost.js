@@ -17,6 +17,7 @@ export default function SinglePost() {
 
   const [nextPost, setnextPost] = useState();
   const [prevPost, setprevPost] = useState();
+  const [randomPost, setRandomPost] = useState();
 
   const myContext = useContext(AppContext);
   const projectList = myContext.projectList;
@@ -44,6 +45,10 @@ export default function SinglePost() {
             setprevPost(projectList[index - 1]);
           }
         }
+
+        setRandomPost(
+          projectList[Math.floor(Math.random() * projectList.length)]
+        );
 
         if (data[0].backgroundImage && data[0].backgroundImage.asset.url) {
           document.documentElement.style.setProperty(
@@ -109,10 +114,12 @@ export default function SinglePost() {
             description={project.subtitle}
             image={project.mainImage && project.mainImage.mainImage.asset.url}
           />
-          {project.stickerarray && (
+
+          {project.stickerarray ? (
             <Stickers stickerArray={project.stickerarray} />
+          ) : (
+            info.stickerarray && <Stickers stickerArray={info.stickerarray} />
           )}
-          {info.stickerarray && <Stickers stickerArray={info.stickerarray} />}
 
           {project.mainImage && (
             <Hero
@@ -146,6 +153,16 @@ export default function SinglePost() {
                 {"<--  " + prevPost.title}
               </NavLink>
             )}
+
+            {randomPost && (
+              <NavLink
+                to={"/projects/" + randomPost.slug.current}
+                className="standard-button surprise"
+              >
+                surprise me
+              </NavLink>
+            )}
+
             {nextPost && (
               <NavLink
                 to={"/projects/" + nextPost.slug.current}

@@ -41,7 +41,7 @@ function App() {
 
     sanityClient
       .fetch(
-        '*[_type == "siteSettings" ]{backgroundImage{asset->{url}}, favicon{asset->{url}}, mainImage, logo, maincolor, detailcolor, collagelayers, popup, popupsarray[]{delay, image, title, url, project->{slug}, useProject, textcolor, maincolor, backgroundimage}, stickerarray, subtitle, textcolor, title, headerMenu[] {_type == "menuItem" => { _type, image, page->{slug}, project->{slug}, url, title}}, footerMenu[] {_type == "menuItem" => { _type, image, page->{slug}, project->{slug}, url, title}}, footerContent}'
+        '*[_type == "siteSettings" ]{backgroundImage{asset->{url}}, favicon{asset->{url}}, mainImage, logo, maincolor, detailcolor, collagelayers,collagelayersMobile, popup, popupsarray[]{delay, image, title, url, project->{slug}, useProject, textcolor, maincolor, backgroundimage}, stickerarray, subtitle, textcolor, title, headerMenu[] {_type == "menuItem" => { _type, image, page->{slug}, project->{slug}, url, title}}, footerMenu[] {_type == "menuItem" => { _type, image, page->{slug}, project->{slug}, url, title}}, footerContent}'
       )
       .then((data) => {
         console.log("site settings", data[0]);

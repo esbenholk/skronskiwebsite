@@ -129,7 +129,7 @@ export const Stickers = ({ stickerArray }) => {
       .slice(0, 10)
       .map((item, index) => {
         const size =
-          width > 786 ? getRandomInt(100, 300) : getRandomInt(50, 100); // px
+          width > 786 ? getRandomInt(100, 300) : getRandomInt(70, 150); // px
         const imgUrl = urlFor(item.asset).width(size).url();
 
         return {
@@ -157,6 +157,7 @@ export const Stickers = ({ stickerArray }) => {
             width: `${sticker.size}px`,
             height: `${sticker.size}px`,
             pointerEvents: "none",
+            zIndex: 99999999,
             // transform: `translate(${scrollYProgress * 100}, 0)`,
 
             // scaleX: scrollYProgress,

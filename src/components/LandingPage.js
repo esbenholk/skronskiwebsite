@@ -1,8 +1,9 @@
-import React, { useContext, lazy, useEffect } from "react";
+import React, { useContext, lazy, useEffect, useState } from "react";
 import AppContext from "../globalState";
 import PageBuilder from "./pageBuilder";
 import SVG from "react-inlinesvg";
 import urlFor from "./functions/urlFor.js";
+import { NavLink } from "react-router-dom";
 
 import { Stickers } from "./frame.js";
 const Projects = lazy(() => import("./projects.js"));
@@ -14,10 +15,14 @@ export default function LandingPage() {
   const info = myContext.siteSettings;
   const projectList = myContext.projectList;
 
+  const [randomPost, setRandomPost] = useState();
+
   useEffect(() => {
     myContext.updatePageTitle(info.title);
 
     console.log("loads landing page");
+
+    setRandomPost(projectList[Math.floor(Math.random() * projectList.length)]);
 
     if (info.backgroundImage && info.backgroundImage.asset.url) {
       document.documentElement.style.setProperty(
@@ -52,6 +57,7 @@ export default function LandingPage() {
     info.detailcolor,
     info.title,
     myContext,
+    projectList,
   ]);
 
   return (
@@ -90,6 +96,17 @@ export default function LandingPage() {
         }}
       >
         {info.stickerarray && <Stickers stickerArray={info.stickerarray} />}
+      </div>
+
+      <div className="projectFooter">
+        {randomPost && (
+          <NavLink
+            to={"/projects/" + randomPost.slug.current}
+            className="standard-button surprise"
+          >
+            surprise me
+          </NavLink>
+        )}
       </div>
     </div>
   );

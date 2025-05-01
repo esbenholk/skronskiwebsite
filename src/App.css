@@ -420,16 +420,19 @@ img {
 
 .projectFooter {
   margin: calc(var(--regMargin) * 2);
-  min-height: 100px;
+  /* min-height: 120px; */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
-.projectFooter .next {
+/* .projectFooter .next {
   position: absolute;
   right: 0;
 }
 .projectFooter .prev {
   position: absolute;
   left: 0;
-}
+} */
 .canvasShower {
   position: relative;
   width: 100vh;
@@ -813,7 +816,22 @@ img {
   }
   .projectFooter {
     margin: calc(var(--regMargin) * 1);
-    min-height: 100px;
+    min-height: 120px;
+  }
+  .projectFooter .next {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+  .projectFooter .prev {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .projectFooter .surprise {
+    position: absolute;
+    left: 0;
+    bottom: 0;
   }
 
   .simulationContainer {
@@ -851,6 +869,7 @@ img {
   .logoContainer svg,
   .logoContainer img {
     width: 100%;
+    max-width: 90%;
     margin-top: -100px;
   }
   .bubble.title {
@@ -899,11 +918,12 @@ img {
   pointer-events: none;
   background-color: rgba(0, 0, 0, 0);
   color: var(--detail-color);
-  border: 2px solid var(--detail-color);
+  /* border: 2px solid var(--detail-color); */
   width: 200px;
   height: 200px;
   z-index: 1000;
   transform: translate(50%, -50%);
+  /* background-image: url(); */
 }
 .tooltip {
   width: 70px;

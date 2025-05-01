@@ -3,7 +3,7 @@ import Matter from "matter-js";
 import sanityClient from "../../client";
 import AppContext from "../../globalState";
 import imageUrlBuilder from "@sanity/image-url";
-
+import SVG from "react-inlinesvg";
 // Get a pre-configured url-builder from your sanity client
 const builder = imageUrlBuilder(sanityClient);
 
@@ -29,7 +29,6 @@ const MatterSimulation = ({ projects }) => {
 
   const myContext = useContext(AppContext);
   const info = myContext.siteSettings;
-  const collageLayers = [...info.collagelayers.images];
 
   const hasAnimatedIn = useRef(false);
   const animationStartTime = useRef(null);
@@ -47,6 +46,7 @@ const MatterSimulation = ({ projects }) => {
   const height = isMobile ? window.innerHeight - 30 : window.innerHeight - 60;
 
   useEffect(() => {
+    let collageLayers = [...info.collagelayers.images];
     setStateheight(height);
     const allStickers = projects.flatMap((p) =>
       p.stickerarray.map((img) => ({
@@ -56,9 +56,10 @@ const MatterSimulation = ({ projects }) => {
       }))
     );
 
-    if (collageLayers && collageLayers.length > 0) {
-      setBackground(collageLayers.shift());
+    if (isMobile && info.collagelayersMobile) {
+      collageLayers = [...info.collagelayersMobile.images];
     }
+
     if (allStickers.length === 0) return;
 
     const engine = engineRef.current;
@@ -141,7 +142,7 @@ const MatterSimulation = ({ projects }) => {
       repeatedStickers = allStickers;
     }
 
-    const baseSize = isMobile ? 30 : 80;
+    const baseSize = isMobile ? 40 : 90;
     const bodies = repeatedStickers.map((sticker, i) => {
       const imageUrl = sticker.imageUrl;
       const groupIndex = i % totalGroups;
@@ -188,6 +189,10 @@ const MatterSimulation = ({ projects }) => {
     });
 
     const renderStack = [];
+
+    if (collageLayers && collageLayers.length > 0) {
+      setBackground(collageLayers.shift());
+    }
 
     collageLayers.forEach((image, i) => {
       const scrollFactor = (i - (collageLayers.length - 1) / 2) * 0.3;
@@ -484,6 +489,13 @@ const MatterSimulation = ({ projects }) => {
           className="hoverSquare"
         >
           <p>{hoveredBody.title}</p>
+          <SVG
+            src={"/frames/starframe.svg"}
+            style={{ width: "100%", height: "100%", display: "block" }}
+            preProcessor={(code) =>
+              code.replace(/<svg/, '<svg preserveAspectRatio="none"')
+            }
+          />
           <p>doubletap to see</p>
         </div>
       )}

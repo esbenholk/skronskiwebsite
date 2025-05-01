@@ -112,10 +112,11 @@ export default function SinglePage() {
             <PageSpecificPopupManager popups={singlePage.popupsarray} />
           )}
 
-          {singlePage.stickerarray && (
+          {singlePage.stickerarray ? (
             <Stickers stickerArray={singlePage.stickerarray} />
+          ) : (
+            info.stickerarray && <Stickers stickerArray={info.stickerarray} />
           )}
-          {info.stickerarray && <Stickers stickerArray={info.stickerarray} />}
 
           {singlePage.mainImage && (
             <Hero
