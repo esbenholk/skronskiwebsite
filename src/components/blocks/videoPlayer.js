@@ -1,11 +1,29 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import urlFor from "../functions/urlFor";
+import SVG from "react-inlinesvg";
 
 import ReactPlayer from "react-player";
 
 const VideoPlayer = ({ url, thumbnail }) => {
   const [playing, setPlaying] = useState(false);
   const playerRef = useRef(null);
+  const detailSvgs = [
+    "buttonClickMe.svg",
+    "buttonGo.svg",
+    "buttonPlay.svg",
+    "buttonPlay2.svg",
+    "buttonPlay3.svg",
+    "buttonPushMe.svg",
+    "buttonPushPlay.svg",
+    "buttonPushToWatch.svg",
+  ];
+
+  const randomDetail = useMemo(() => {
+    if (detailSvgs.length === 0) return null;
+    const index = Math.floor(Math.random() * detailSvgs.length);
+    return detailSvgs[index];
+    // eslint-disable-next-line
+  }, []);
 
   const isMobile = window.innerWidth < 768;
 
@@ -71,7 +89,13 @@ const VideoPlayer = ({ url, thumbnail }) => {
             className="thumbnail"
           >
             <div className="playButton">
-              <p>play button</p>
+              <SVG
+                src={"/frames/icons/" + randomDetail}
+                style={{ width: "100%", height: "100%", display: "block" }}
+                preProcessor={(code) =>
+                  code.replace(/<svg/, '<svg preserveAspectRatio="none"')
+                }
+              />
             </div>
           </div>
         )}

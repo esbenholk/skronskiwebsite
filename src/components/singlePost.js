@@ -26,7 +26,7 @@ export default function SinglePost() {
   useEffect(() => {
     sanityClient
       .fetch(
-        `*[_type == "project" && slug.current == "${slug}"]{ title, location, subtitle, slug,year,date, backgroundImage{asset->{url}}, mainImage, maincolor, detailcolor, popup, popupsarray[]{delay, image, title, url, project->{slug}, useProject, textcolor, maincolor, backgroundimage}, stickerarray, subtitle, textcolor, categories[]->{title, slug, color},${pageBuilderquerystring}} `
+        `*[_type == "project" && slug.current == "${slug}"]{ title, location, subtitle, slug,year,date, backgroundImage{asset->{url}}, mainImage, maincolor, detailcolor, popup, popupsarray[]{position,delay, image, title, url, project->{slug}, useProject, textcolor, maincolor, backgroundimage}, stickerarray, subtitle, textcolor, categories[]->{title, slug, color},${pageBuilderquerystring}} `
       )
       .then((data) => {
         setProject(data[0]);

@@ -12,7 +12,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import useWindowDimensions from "./components/functions/useWindowDimensions.js";
 
 import { HeadTags } from "./components/blocks/helmetHeaderTags";
-import { GlobalPopupManager } from "./components/popUpHandler.js";
+import { PageSpecificPopupManager } from "./components/popUpHandler.js";
 import CustomCursor from "./components/customCursor.js";
 
 const LandingPage = lazy(() => import("./components/LandingPage.js"));
@@ -41,7 +41,7 @@ function App() {
 
     sanityClient
       .fetch(
-        '*[_type == "siteSettings" ]{backgroundImage{asset->{url}}, favicon{asset->{url}}, mainImage, logo, maincolor, detailcolor, collagelayers,collagelayersMobile, popup, popupsarray[]{delay, image, title, url, project->{slug}, useProject, textcolor, maincolor, backgroundimage}, stickerarray, subtitle, textcolor, title, headerMenu[] {_type == "menuItem" => { _type, image, page->{slug}, project->{slug}, url, title}}, footerMenu[] {_type == "menuItem" => { _type, image, page->{slug}, project->{slug}, url, title}}, footerContent}'
+        '*[_type == "siteSettings" ]{backgroundImage{asset->{url}}, favicon{asset->{url}}, mainImage, logo, maincolor, detailcolor, collagelayers,collagelayersMobile, popup, popupsarray[]{position,delay, image, title, url, project->{slug}, useProject, textcolor, maincolor, backgroundimage}, stickerarray, subtitle, textcolor, title, headerMenu[] {_type == "menuItem" => { _type, image, page->{slug}, project->{slug}, url, title}}, footerMenu[] {_type == "menuItem" => { _type, image, page->{slug}, project->{slug}, url, title}}, footerContent}'
       )
       .then((data) => {
         console.log("site settings", data[0]);
@@ -144,10 +144,6 @@ function App() {
                   />
                 )}
 
-                {siteSettings.popupsarray &&
-                  siteSettings.popupsarray.length > 0 && (
-                    <GlobalPopupManager popups={siteSettings.popupsarray} />
-                  )}
                 {width > 786 && (
                   <CustomCursor
                     animateOnClasses={[
@@ -167,6 +163,13 @@ function App() {
                 <div className="footer cardboard-style ">
                   <Footer />
                 </div>
+
+                {siteSettings.popupsarray &&
+                  siteSettings.popupsarray.length > 0 && (
+                    <PageSpecificPopupManager
+                      popups={siteSettings.popupsarray}
+                    />
+                  )}
               </BrowserRouter>
             </AppContext.Provider>
           </Suspense>

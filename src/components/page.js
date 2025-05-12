@@ -30,7 +30,7 @@ export default function SinglePage() {
 
     sanityClient
       .fetch(
-        `*[_type == "page" && slug.current == "${slug}"]{ title, slug,  mainImage, maincolor, popup,popupsarray[]{delay, image, title, url, project->{slug}, useProject, textcolor, maincolor, backgroundimage}, stickerarray, backgroundImage{asset->{url}}, textcolor,  categories[]->{title, slug},${pageBuilderquerystring}} `
+        `*[_type == "page" && slug.current == "${slug}"]{ title, slug,  mainImage, maincolor, popup,popupsarray[]{position,delay, image, title, url, project->{slug}, useProject, textcolor, maincolor, backgroundimage}, stickerarray, backgroundImage{asset->{url}}, textcolor,  categories[]->{title, slug},${pageBuilderquerystring}} `
       )
       .then((data) => {
         setSinglePage(data[0]);

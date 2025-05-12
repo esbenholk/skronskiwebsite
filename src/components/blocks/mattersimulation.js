@@ -490,13 +490,13 @@ const MatterSimulation = ({ projects }) => {
         >
           <p>{hoveredBody.title}</p>
           <SVG
-            src={"/frames/starframe.svg"}
+            src={"/frames/icons/tabtosee.svg"}
             style={{ width: "100%", height: "100%", display: "block" }}
             preProcessor={(code) =>
               code.replace(/<svg/, '<svg preserveAspectRatio="none"')
             }
           />
-          <p>doubletap to see</p>
+          {/* <p>doubletap to see</p> */}
         </div>
       )}
       {grabbedBody && width < 786 && (
@@ -512,9 +512,16 @@ const MatterSimulation = ({ projects }) => {
             zIndex: 1000,
           }}
         >
+          <SVG
+            src={"/frames/icons/dragtosee.svg"}
+            style={{ width: "100%", height: "100%", display: "block" }}
+            preProcessor={(code) =>
+              code.replace(/<svg/, '<svg preserveAspectRatio="none"')
+            }
+          />
           <p>
             {tooltipScreenPos.x < width - 50
-              ? "drag to right to see"
+              ? ""
               : "yes here "}
           </p>
         </div>

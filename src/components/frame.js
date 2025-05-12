@@ -50,20 +50,56 @@ export default Frame;
 export const Detail = () => {
   const { width } = useWindowDimensions();
   const detailSvgs = [
-    "/frames/heart1.svg",
-    "/frames/heart2svg",
-    "/frames/heart3.svg",
-    "/frames/heart4.svg",
-    "/frames/hearts.svg",
-    "/frames/doodle.svg",
-    "/frames/smiley1.svg",
-    "/frames/smiley2.svg",
-    "/frames/smiley3.svg",
-    "/frames/smileys.svg",
-    "/frames/star1.svg",
-    "/frames/star2.svg",
-    "/frames/star3.svg",
-    "/frames/stars.svg",
+    "arrow.svg",
+    "banana.svg",
+    "berry.svg",
+    "bubbles.svg",
+
+    "circle.svg",
+    "doodle.svg",
+    "dragtosee.svg",
+    "fire.svg",
+    "fire2.svg",
+    "fire3.svg",
+    "flower.svg",
+    "flower1.svg",
+    "flower2.svg",
+    "flower3.svg",
+    "flowerface.svg",
+    "flowers.svg",
+    "frame.svg",
+    "heart.svg",
+    "heart10.svg",
+    "heart2.svg",
+    "heart20.svg",
+    "heart3.svg",
+    "heart30.svg",
+    "heartCubes.svg",
+    "hearts1.svg",
+    "heartSquiggle.svg",
+    "match.svg",
+
+    "popUp.svg",
+    "smiley.svg",
+    "smiley10.svg",
+    "smiley2.svg",
+    "smiley20.svg",
+    "smiley30.svg",
+    "smiley4.svg",
+    "squiggle.svg",
+    "squiigle.svg",
+    "star.svg",
+    "star10.svg",
+    "star2.svg",
+    "star20.svg",
+    "star3.svg",
+    "star30.svg",
+    "star4.svg",
+    "stars.svg",
+    "stars2.svg",
+    "strawberry.svg",
+    "tabtosee.svg",
+    "tomato.svg",
   ];
 
   const randomDetail = useMemo(() => {
@@ -83,7 +119,7 @@ export const Detail = () => {
   }, []);
 
   const size = useMemo(() => {
-    return width > 786 ? 50 + Math.random() * 150 : 10 + Math.random() * 10;
+    return width > 786 ? 70 + Math.random() * 150 : 30 + Math.random() * 10;
     // eslint-disable-next-line
   }, []);
 
@@ -103,7 +139,7 @@ export const Detail = () => {
       }}
     >
       <SVG
-        src={randomDetail}
+        src={"/frames/icons/" + randomDetail}
         style={{ width: "100%", height: "100%", display: "block" }}
         preProcessor={(code) =>
           code.replace(/<svg/, '<svg preserveAspectRatio="none"')
@@ -157,7 +193,7 @@ export const Stickers = ({ stickerArray }) => {
             width: `${sticker.size}px`,
             height: `${sticker.size}px`,
             pointerEvents: "none",
-            zIndex: 99999999,
+            zIndex: 1,
             // transform: `translate(${scrollYProgress * 100}, 0)`,
 
             // scaleX: scrollYProgress,

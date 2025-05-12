@@ -1,6 +1,6 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
 import AppContext from "../globalState";
-
+import SVG from "react-inlinesvg";
 import MenuItem from "./menuItem.js";
 import { useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -44,16 +44,33 @@ const SketchyMenu = ({ items }) => {
   return (
     <div className="menu-wrapper">
       <AnimatePresence>
-        <motion.img
+        <motion.div
           onClick={() => openCloseMenu(!isOpen)}
-          src={process.env.PUBLIC_URL + "/skronskis/banana.png"}
           alt="menu teaser"
           className={isOpen ? "menu-image-peek open" : "menu-image-peek"}
           initial={false}
           animate={{
             transition: { type: "spring", stiffness: 70, damping: 12 },
           }}
-        />
+        >
+          <img
+            src={process.env.PUBLIC_URL + "/skronskis/banana.png"}
+            alt="hand holding a banan peel as menu icon"
+          />
+          <SVG
+            src={"/frames/icons/menu.svg"}
+            style={{
+              width: "20%",
+              position: "absolute",
+              top: "50%",
+              left: "30px",
+              display: "block",
+            }}
+            preProcessor={(code) =>
+              code.replace(/<svg/, '<svg preserveAspectRatio="none"')
+            }
+          />
+        </motion.div>
         {isOpen && (
           <motion.div
             ref={menuRef}

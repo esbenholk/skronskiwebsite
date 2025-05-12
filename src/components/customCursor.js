@@ -56,7 +56,7 @@ const CustomCursor = ({ animateOnClasses = [] }) => {
   return (
     <div className="custom-cursor" ref={cursorRef}>
       {" "}
-      <SVG src={process.env.PUBLIC_URL + "/frames/heart1.svg"} />
+      <SVG src={process.env.PUBLIC_URL + "/frames/icons/heart10.svg"} />
     </div>
   );
 };
