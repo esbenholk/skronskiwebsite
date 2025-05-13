@@ -85,10 +85,18 @@ export function PageSpecificPopupManager({ popups }) {
 function Popup({ popup, onDismiss }) {
   const [isOpen, setIsOpen] = useState(false);
   const [randomOffset, setRandomOffset] = useState(0);
-  const [position] = useState(popup.position ? popup.position : "bottom"); // default, will randomize later
+  const [position, setPosition] = useState(
+    popup.position ? popup.position : null
+  ); // default, will randomize later
   const { width } = useWindowDimensions();
 
   useEffect(() => {
+    if (popup.position == null) {
+      const positions = ["top", "bottom", "left", "right"];
+      const randomPos = positions[Math.floor(Math.random() * positions.length)];
+      setPosition(randomPos);
+    }
+
     // Random offset for X or Y (depends on position)
     const random = Math.floor(Math.random() * 70);
     setRandomOffset(random);
