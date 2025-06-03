@@ -49,11 +49,13 @@ const MatterSimulation = ({ projects }) => {
     let collageLayers = [...info.collagelayers.images];
     setStateheight(height);
     const allStickers = projects.flatMap((p) =>
-      p.stickerarray.map((img) => ({
-        imageUrl: urlFor(img.asset).width(300).url(),
-        projectUrl: `/projects/${p.slug.current}`,
-        title: p.title,
-      }))
+      Array.isArray(p.stickerarray)
+        ? p.stickerarray.map((img) => ({
+            imageUrl: urlFor(img.asset).width(300).url(),
+            projectUrl: `/projects/${p.slug.current}`,
+            title: p.title,
+          }))
+        : []
     );
 
     if (isMobile && info.collagelayersMobile) {
@@ -519,11 +521,7 @@ const MatterSimulation = ({ projects }) => {
               code.replace(/<svg/, '<svg preserveAspectRatio="none"')
             }
           />
-          <p>
-            {tooltipScreenPos.x < width - 50
-              ? ""
-              : "yes here "}
-          </p>
+          <p>{tooltipScreenPos.x < width - 50 ? "" : "yes here "}</p>
         </div>
       )}
     </>

@@ -816,12 +816,13 @@ img {
   }
   .projectFooter {
     margin: calc(var(--regMargin) * 1);
-    min-height: 120px;
+    min-height: 160px;
   }
   .projectFooter .next {
     position: absolute;
     right: 0;
-    bottom: 0;
+    bottom: 50%;
+    transform: translate(0, 50%);
   }
   .projectFooter .prev {
     position: absolute;
