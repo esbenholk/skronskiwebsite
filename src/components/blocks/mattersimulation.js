@@ -33,11 +33,11 @@ const MatterSimulation = ({ projects }) => {
   const hasAnimatedIn = useRef(false);
   const animationStartTime = useRef(null);
 
-  const isMobile = window.innerWidth < 768;
+  const isMobile = window.innerWidth < 800;
   const [stateHeight, setStateheight] = useState();
 
   const ENTRY_DURATION = 1500; // milliseconds
-  const bodyTargetScale = isMobile ? 0.3 : 1;
+  const bodyTargetScale = isMobile ? 0.5 : 1;
   const imageEntryDistance = window.innerWidth * 1.2; // move in from off-screen
 
   const width = isMobile
@@ -48,19 +48,51 @@ const MatterSimulation = ({ projects }) => {
   useEffect(() => {
     let collageLayers = [...info.collagelayers.images];
     setStateheight(height);
-    const allStickers = projects.flatMap((p) =>
-      Array.isArray(p.stickerarray)
-        ? p.stickerarray.map((img) => ({
+    const allStickers = [];
+    const remainingStickers = [];
+
+    projects.forEach((p) => {
+      const main = p.mainSticker?.asset;
+      const hasArray =
+        Array.isArray(p.stickerarray) && p.stickerarray.length > 0;
+      const fallback = hasArray ? p.stickerarray[0]?.asset : null;
+
+      const chosenAsset = main || fallback;
+
+      if (chosenAsset) {
+        allStickers.push({
+          imageUrl: urlFor(chosenAsset).width(300).url(),
+          projectUrl: `/projects/${p.slug.current}`,
+          title: p.title,
+        });
+      }
+
+      // Collect remaining stickers (excluding the one we used above)
+      if (hasArray) {
+        const rest = p.stickerarray
+          .slice(main ? 0 : 1) // if we used mainSticker, keep all; if we used fallback, skip the first
+          .map((img) => ({
             imageUrl: urlFor(img.asset).width(300).url(),
             projectUrl: `/projects/${p.slug.current}`,
             title: p.title,
-          }))
-        : []
-    );
+          }));
 
+        remainingStickers.push(...rest);
+      }
+    });
+
+    if (allStickers.length < 15 && remainingStickers.length > 0) {
+      const needed = 15 - allStickers.length;
+      const shuffled = remainingStickers.sort(() => Math.random() - 0.5);
+      const extras = shuffled.slice(0, needed);
+      allStickers.push(...extras);
+    }
     if (isMobile && info.collagelayersMobile) {
       collageLayers = [...info.collagelayersMobile.images];
     }
+
+    console.log("mainstickers one per project", allStickers);
+    console.log("remaains", remainingStickers);
 
     if (allStickers.length === 0) return;
 
@@ -129,20 +161,10 @@ const MatterSimulation = ({ projects }) => {
       return body;
     };
 
-    const totalGroups = collageLayers.length + 1;
+    const totalGroups = collageLayers.length;
     const groupedBodies = Array.from({ length: totalGroups }, () => []);
     const allBodies = [];
-    let repeatedStickers;
-
-    if (allStickers.length < 15 && isMobile) {
-      const totalBodies = 30;
-      const repeatCount = Math.ceil(totalBodies / projects.length);
-      repeatedStickers = Array.from({ length: repeatCount }, () => allStickers)
-        .flat()
-        .slice(0, totalBodies);
-    } else {
-      repeatedStickers = allStickers;
-    }
+    let repeatedStickers = allStickers;
 
     const baseSize = isMobile ? 40 : 90;
     const bodies = repeatedStickers.map((sticker, i) => {
@@ -151,6 +173,8 @@ const MatterSimulation = ({ projects }) => {
 
       const scaleFactor = 0.5 + Math.random() * 1; // Random size multiplier
       const size = baseSize * scaleFactor;
+
+      console.log("creates body");
 
       const body = Matter.Bodies.circle(
         Math.random() * width,
@@ -162,8 +186,8 @@ const MatterSimulation = ({ projects }) => {
           render: {
             sprite: {
               texture: imageUrl,
-              xScale: isMobile ? 0.5 : 1,
-              yScale: isMobile ? 0.5 : 1,
+              xScale: isMobile ? 2 : 1,
+              yScale: isMobile ? 2 : 1,
             },
           },
         }
@@ -173,11 +197,11 @@ const MatterSimulation = ({ projects }) => {
       body.hasSpawned = false;
 
       // Set sprite visually invisible
-      body.render.sprite.xScale = 0.01;
-      body.render.sprite.yScale = 0.01;
+      // body.render.sprite.xScale = 0.01;
+      // body.render.sprite.yScale = 0.01;
 
       body.baseRadius = 30;
-      body.baseSpriteScale = isMobile ? 0.5 : 1;
+      body.baseSpriteScale = isMobile ? 0.7 : 1;
 
       Matter.Body.scale(body, body.baseRadius / 30, body.baseRadius / 30);
       body.render.sprite.xScale = body.baseSpriteScale;
@@ -466,7 +490,7 @@ const MatterSimulation = ({ projects }) => {
   }, [projects, bodyTargetScale, height, imageEntryDistance, isMobile]);
 
   return (
-    <>
+    <div onMouseLeave={() => setHoveredBody(null)}>
       {/* <div className="canvasShower"></div> */}
       <div
         ref={sceneRef}
@@ -484,9 +508,10 @@ const MatterSimulation = ({ projects }) => {
       {hoveredBody && (
         <div
           style={{
-            position: "fixed",
+            position: "absolute",
             left: hoverPosition.x,
             top: hoverPosition.y,
+            transform: "translate(-50%, -75%)",
           }}
           className="hoverSquare"
         >
@@ -524,7 +549,7 @@ const MatterSimulation = ({ projects }) => {
           <p>{tooltipScreenPos.x < width - 50 ? "" : "yes here "}</p>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AppContext from "../globalState";
 import sanityClient from "../client";
 import { useParams, useSearchParams } from "react-router-dom";
 import { HeadTags } from "./blocks/helmetHeaderTags";
-
+import { NavLink } from "react-router-dom";
 import { PageSpecificPopupManager } from "./popUpHandler";
 // import Loader from "./blocks/loader";
 import PageBuilder from "./pageBuilder";
@@ -16,10 +16,20 @@ export default function SinglePage() {
   const [singlePage, setSinglePage] = useState();
   const myContext = useContext(AppContext);
   const info = myContext.siteSettings;
+  const [randomPost, setRandomPost] = useState();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [slug]);
+
+    if (myContext.projectList.length > 0) {
+      setRandomPost(
+        myContext.projectList[
+          Math.floor(Math.random() * myContext.projectList.length)
+        ]
+      );
+    }
+  }, [slug, myContext.projectList]);
+
   ///get project data, set category names
   useEffect(() => {
     const params = [];
@@ -134,6 +144,17 @@ export default function SinglePage() {
           )}
         </>
       )}
+
+      <div className="projectFooter">
+        {randomPost && (
+          <NavLink
+            to={"/projects/" + randomPost.slug.current}
+            className="standard-button surprise"
+          >
+            surprise me
+          </NavLink>
+        )}
+      </div>
     </>
   );
 }

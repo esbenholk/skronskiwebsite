@@ -1,15 +1,13 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useContext } from "react";
 import SVG from "react-inlinesvg";
 import urlFor from "./functions/urlFor";
 import { motion } from "framer-motion";
 import useWindowDimensions from "./functions/useWindowDimensions";
+import AppContext from "../globalState";
 
 const Frame = () => {
-  const frameSvgs = [
-    "/frames/cubeframe.svg",
-    "/frames/cubeframe1.svg",
-    "/frames/starframe.svg",
-  ];
+  const myContext = useContext(AppContext);
+  const frameSvgs = myContext.frames;
 
   const randomSvg = useMemo(() => {
     if (frameSvgs.length === 0) return null;
@@ -27,15 +25,15 @@ const Frame = () => {
         top: "50%",
         left: "50%",
         transform: "translate(-50%,-50%)",
-        width: "110%",
-        height: "110%",
+        width: "105%",
+        height: "105%",
         pointerEvents: "none",
         objectFit: "cover",
         zIndex: 1,
       }}
     >
       <SVG
-        src={process.env.PUBLIC_URL + randomSvg}
+        src={randomSvg}
         style={{ width: "100%", height: "100%", display: "block" }}
         preProcessor={(code) =>
           code.replace(/<svg/, '<svg preserveAspectRatio="none"')
@@ -49,58 +47,8 @@ export default Frame;
 
 export const Detail = () => {
   const { width } = useWindowDimensions();
-  const detailSvgs = [
-    "arrow.svg",
-    "banana.svg",
-    "berry.svg",
-    "bubbles.svg",
-
-    "circle.svg",
-    "doodle.svg",
-    "dragtosee.svg",
-    "fire.svg",
-    "fire2.svg",
-    "fire3.svg",
-    "flower.svg",
-    "flower1.svg",
-    "flower2.svg",
-    "flower3.svg",
-    "flowerface.svg",
-    "flowers.svg",
-    "frame.svg",
-    "heart.svg",
-    "heart10.svg",
-    "heart2.svg",
-    "heart20.svg",
-    "heart3.svg",
-    "heart30.svg",
-    "heartCubes.svg",
-    "hearts1.svg",
-    "heartSquiggle.svg",
-    "match.svg",
-
-    "popUp.svg",
-    "smiley.svg",
-    "smiley10.svg",
-    "smiley2.svg",
-    "smiley20.svg",
-    "smiley30.svg",
-    "smiley4.svg",
-    "squiggle.svg",
-    "squiigle.svg",
-    "star.svg",
-    "star10.svg",
-    "star2.svg",
-    "star20.svg",
-    "star3.svg",
-    "star30.svg",
-    "star4.svg",
-    "stars.svg",
-    "stars2.svg",
-    "strawberry.svg",
-    "tabtosee.svg",
-    "tomato.svg",
-  ];
+  const myContext = useContext(AppContext);
+  const detailSvgs = myContext.doodles;
 
   const randomDetail = useMemo(() => {
     if (detailSvgs.length === 0) return null;
@@ -139,7 +87,7 @@ export const Detail = () => {
       }}
     >
       <SVG
-        src={"/frames/icons/" + randomDetail}
+        src={randomDetail}
         style={{ width: "100%", height: "100%", display: "block" }}
         preProcessor={(code) =>
           code.replace(/<svg/, '<svg preserveAspectRatio="none"')
@@ -157,6 +105,27 @@ export const Stickers = ({ stickerArray }) => {
   const getRandomInt = (min, max) =>
     Math.floor(Math.random() * (max - min + 1)) + min;
 
+  const getEdgePosition = (edge) => {
+    const offset = getRandomInt(0, 90); // some spread along the edge
+    switch (edge) {
+      case "top":
+        return { top: 0, left: offset };
+      case "bottom":
+        return { top: 95, left: offset };
+      case "left":
+        return { top: offset, left: 0 };
+      case "right":
+        return { top: offset, left: 95 };
+      default:
+        return { top: offset, left: offset };
+    }
+  };
+
+  const chooseRandomEdge = () => {
+    const edges = ["top", "bottom", "left", "right"];
+    return edges[getRandomInt(0, edges.length - 1)];
+  };
+
   useEffect(() => {
     if (!stickerArray || stickerArray.length === 0) return;
 
@@ -165,14 +134,16 @@ export const Stickers = ({ stickerArray }) => {
       .slice(0, 10)
       .map((item, index) => {
         const size =
-          width > 786 ? getRandomInt(100, 300) : getRandomInt(70, 150); // px
+          width > 786 ? getRandomInt(100, 300) : getRandomInt(70, 150);
+
         const imgUrl = urlFor(item.asset).width(size).url();
+        const edge = chooseRandomEdge();
+        const position = getEdgePosition(edge);
 
         return {
           id: index,
           url: imgUrl,
-          top: getRandomInt(0, 90), // percent
-          left: getRandomInt(0, 90), // percent
+          ...position,
           size,
         };
       });

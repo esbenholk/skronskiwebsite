@@ -1,18 +1,15 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { Image } from "./blocks/image";
 import { motion } from "framer-motion";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import SVG from "react-inlinesvg";
+import Frame from "./frame";
+import AppContext from "../globalState";
+import { useContext } from "react";
 
-const stickerUrls = [
-  "/frames/doodle.svg",
-  "/frames/smileys.svg",
-  "/frames/stars.svg",
-  "/frames/simplesmiley.svg",
-];
 
 function Projects({ projects }) {
+  const myContext = useContext(AppContext);
   const sortedProjects = [...projects].sort(
     (a, b) => new Date(b.date) - new Date(a.date)
   );
@@ -38,7 +35,7 @@ function Projects({ projects }) {
       <Masonry>
         {sortedProjects.map((project, index) => {
           const direction = index % 2 === 0 ? -100 : 100;
-          const randomStickers = getRandomStickers(stickerUrls);
+          const randomStickers = getRandomStickers(myContext.doodles);
           return (
             <motion.div
               key={index}
@@ -61,6 +58,7 @@ function Projects({ projects }) {
               </Link>
 
               <div className="project-info">
+                <Frame />
                 {project.title && (
                   <motion.div
                     className="bubble title"
@@ -110,7 +108,6 @@ function Projects({ projects }) {
                       }}
                     />
                   ))}
-                  e
                 </div>
               </div>
             </motion.div>

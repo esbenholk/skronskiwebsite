@@ -1,6 +1,6 @@
 /* eslint-disable no-lone-blocks */
 import { BrowserRouter, Routes, useLocation, Route } from "react-router-dom";
-import React, { Suspense, lazy, useEffect, useState, createRef } from "react";
+import { Suspense, lazy, useEffect, useState, createRef } from "react";
 // import NavBar from "./components/NavBar.js";
 import "./App.css";
 import sanityClient from "./client";
@@ -14,34 +14,41 @@ import useWindowDimensions from "./components/functions/useWindowDimensions.js";
 import { HeadTags } from "./components/blocks/helmetHeaderTags";
 import { PageSpecificPopupManager } from "./components/popUpHandler.js";
 import CustomCursor from "./components/customCursor.js";
-
+import imageUrlBuilder from "@sanity/image-url";
+import { pageBuilderquerystring } from "./components/queeries.js";
+// Get a pre-configured url-builder from your sanity client
+const builder = imageUrlBuilder(sanityClient);
+export function urlFor(source) {
+  return builder.image(source);
+}
 const LandingPage = lazy(() => import("./components/LandingPage.js"));
 const SinglePost = lazy(() => import("./components/singlePost.js"));
 const SinglePage = lazy(() => import("./components/page.js"));
 const Footer = lazy(() => import("./components/Footer.js"));
 const ProjectPage = lazy(() => import("./components/projectPage.js"));
+const Category = lazy(() => import("./components/Category.js"));
 
 function App() {
   const [siteSettings, setSiteSettings] = useState();
-  const [projectList, setProjectList] = useState();
-
+  const [projectList, setProjectList] = useState([]);
   const [tags, setTags] = useState([]);
   const [categories, setCategories] = useState([]);
   const mainRef = createRef();
 
   const [pageTitle, setPageTitle] = useState();
-
+  const [frames, setFrames] = useState([]);
+  const [doodles, setDoodles] = useState([]);
+  const [playButtons, setPlayButtons] = useState([]);
   const { width } = useWindowDimensions();
   const updatePageTitle = (newTitle) => {
     setPageTitle(newTitle);
   };
+
   // get sitesettings and page names (for slug redirection)
   useEffect(() => {
-    console.log("u r doing amazing sweety");
-
     sanityClient
       .fetch(
-        '*[_type == "siteSettings" ]{backgroundImage{asset->{url}}, favicon{asset->{url}}, mainImage, logo, maincolor, detailcolor, collagelayers,collagelayersMobile, popup, popupsarray[]{position,delay, image, title, url, project->{slug}, useProject, textcolor, maincolor, backgroundimage}, stickerarray, subtitle, textcolor, title, headerMenu[] {_type == "menuItem" => { _type, image, page->{slug}, project->{slug}, url, title}}, footerMenu[] {_type == "menuItem" => { _type, image, page->{slug}, project->{slug}, url, title}}, footerContent}'
+        '*[_type == "siteSettings" ]{backgroundImage{asset->{url}}, favicon{asset->{url}}, mainImage, frames, doodles, playButtons, logo, maincolor, detailcolor, collagelayers,collagelayersMobile, popup, popupsarray[]{position,delay, image, title, url, project->{slug}, useProject, textcolor, maincolor, backgroundimage}, stickerarray, subtitle, textcolor, title, headerMenu[] {_type == "button" => { _type, linkTarget{url, project->{slug},category->{slug},page->{slug}, type}, title}}, footerMenu[] {_type == "button" => { _type, linkTarget{url, project->{slug},category->{slug},page->{slug}, type}, title}}, footerContent}'
       )
       .then((data) => {
         console.log("site settings", data[0]);
@@ -73,6 +80,28 @@ function App() {
           );
         }
 
+        if (data[0].frames) {
+          let assets = [];
+          for (let index = 0; index < data[0].frames.length; index++) {
+            assets.push(urlFor(data[0].frames[index].asset).url());
+          }
+          setFrames(assets);
+        }
+        if (data[0].doodles) {
+          let dassets = [];
+          for (let index = 0; index < data[0].doodles.length; index++) {
+            dassets.push(urlFor(data[0].doodles[index].asset).url());
+          }
+          setDoodles(dassets);
+        }
+        if (data[0].playButtons) {
+          let passets = [];
+          for (let index = 0; index < data[0].playButtons.length; index++) {
+            passets.push(urlFor(data[0].playButtons[index].asset).url());
+          }
+          setPlayButtons(passets);
+        }
+
         setSiteSettings(data[0]);
       })
       .catch(console.error);
@@ -84,27 +113,28 @@ function App() {
 
     sanityClient
       .fetch(
-        ' *[_type == "project"]{ title, slug, date, location, description, year, mainImage, stickerarray, tags, categories[]->{title, slug, color}, }'
+        ` *[_type == "project"]{ title, slug, date, location, description, year, mainImage, mainSticker,stickerarray, tags, categories[]->{title, slug, color}, ${pageBuilderquerystring} }`
       )
       .then((data) => {
         data.sort((a, b) => b.year - a.year);
         setProjectList(data);
-        // var categories = [];
-        // var tempCategoryNames = [];
-        // for (let index = 0; index < data.length; index++) {
-        //   const post = data[index];
-        //   if (post.categories != null && Array.isArray(post.categories)) {
-        //     for (let index = 0; index < post.categories.length; index++) {
-        //       const category = post.categories[index];
 
-        //       if (!tempCategoryNames.includes(category.title)) {
-        //         tempCategoryNames.push(category.title);
-        //         categories.push(category);
-        //       }
-        //     }
-        //   }
-        // }
-        // setCategoryNames(tempCategoryNames);
+        var categories = [];
+        var tempCategoryNames = [];
+        for (let index = 0; index < data.length; index++) {
+          const post = data[index];
+          if (post.categories != null && Array.isArray(post.categories)) {
+            for (let index = 0; index < post.categories.length; index++) {
+              const category = post.categories[index];
+
+              if (!tempCategoryNames.includes(category.title)) {
+                tempCategoryNames.push(category.title);
+                categories.push(category);
+              }
+            }
+          }
+        }
+        setCategories(categories);
       })
       .catch(console.error);
   }, []);
@@ -116,6 +146,10 @@ function App() {
     tags: tags,
     categories: categories,
     mainRef: mainRef,
+    frames: frames,
+    doodles: doodles,
+    playButtons: playButtons,
+
     setSiteSettings,
     setProjectList,
     setTags,
@@ -207,6 +241,15 @@ const routes = [
       <>
         <div className="background"></div>
         <ProjectPage />
+      </>
+    ),
+  },
+  {
+    path: "category/:slug",
+    element: (
+      <>
+        <div className="background"></div>
+        <Category />
       </>
     ),
   },

@@ -1,4 +1,4 @@
-import React, { useContext, lazy, useEffect, useState } from "react";
+import React, { useContext, lazy, useEffect } from "react";
 import AppContext from "../globalState";
 import PageBuilder from "./pageBuilder";
 import SVG from "react-inlinesvg";
@@ -15,14 +15,8 @@ export default function LandingPage() {
   const info = myContext.siteSettings;
   const projectList = myContext.projectList;
 
-  const [randomPost, setRandomPost] = useState();
-
   useEffect(() => {
     myContext.updatePageTitle(info.title);
-
-    console.log("loads landing page");
-
-    setRandomPost(projectList[Math.floor(Math.random() * projectList.length)]);
 
     if (info.backgroundImage && info.backgroundImage.asset.url) {
       document.documentElement.style.setProperty(
@@ -99,9 +93,9 @@ export default function LandingPage() {
       </div>
 
       <div className="projectFooter">
-        {randomPost && (
+        {myContext.randomPost && (
           <NavLink
-            to={"/projects/" + randomPost.slug.current}
+            to={"/projects/" + myContext.randomPost.slug.current}
             className="standard-button surprise"
           >
             surprise me

@@ -3,20 +3,16 @@ import urlFor from "../functions/urlFor";
 import SVG from "react-inlinesvg";
 
 import ReactPlayer from "react-player";
+import AppContext from "../../globalState";
+import { useContext } from "react";
 
 const VideoPlayer = ({ url, thumbnail }) => {
   const [playing, setPlaying] = useState(false);
   const playerRef = useRef(null);
-  const detailSvgs = [
-    "buttonClickMe.svg",
-    "buttonGo.svg",
-    "buttonPlay.svg",
-    "buttonPlay2.svg",
-    "buttonPlay3.svg",
-    "buttonPushMe.svg",
-    "buttonPushPlay.svg",
-    "buttonPushToWatch.svg",
-  ];
+
+  const myContext = useContext(AppContext);
+
+  const detailSvgs = myContext.playButtons;
 
   const randomDetail = useMemo(() => {
     if (detailSvgs.length === 0) return null;

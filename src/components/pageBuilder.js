@@ -37,6 +37,7 @@ function PageBlock({ pageBlock }) {
 
       {pageBlock._type === "listobject" && (
         <div className="cvblock textblock">
+          <Frame />
           <h3>{pageBlock.title}</h3>
           {pageBlock.listicles.map((listicle, i) => {
             return (
@@ -82,9 +83,40 @@ function PageBlock({ pageBlock }) {
             <div className="realpaper textblock">
               <BlockContent blocks={pageBlock.content} />
               <Detail />
+              <Frame />
             </div>
           )}
         </>
+      )}
+
+      {pageBlock._type === "buttons" && (
+        <div className="buttons flex-row gap">
+          {pageBlock.buttons.map((listicle, i) => {
+            return (
+              <div key={i} className="standard-button">
+                {listicle.linkTarget && (
+                  <Link
+                    key={i.toString() + listicle.title}
+                    to={
+                      listicle.linkTarget.page
+                        ? "/" + listicle.linkTarget.page.slug.current
+                        : listicle.linkTarget.project
+                        ? "/projects/" +
+                          listicle.linkTarget.project.slug.current
+                        : listicle.linkTarget.category
+                        ? "/" + listicle.linkTarget.category.slug.current
+                        : listicle.linkTarget.url
+                        ? "/" + listicle.linkTarget.url
+                        : "/"
+                    }
+                  >
+                    {listicle.title}
+                  </Link>
+                )}
+              </div>
+            );
+          })}
+        </div>
       )}
 
       {pageBlock._type === "video" && (
@@ -96,6 +128,7 @@ function PageBlock({ pageBlock }) {
           {pageBlock.description && (
             <motion.div className="video-info">
               <BlockContent blocks={pageBlock.description} />
+              <Frame />
             </motion.div>
           )}
         </>

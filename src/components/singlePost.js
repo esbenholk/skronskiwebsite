@@ -9,7 +9,7 @@ import PageBuilder from "./pageBuilder";
 import { pageBuilderquerystring } from "./queeries";
 import Hero from "./blocks/hero";
 
-import { Stickers } from "./frame";
+import Frame, { Stickers } from "./frame";
 
 export default function SinglePost() {
   const { slug } = useParams();
@@ -17,22 +17,55 @@ export default function SinglePost() {
 
   const [nextPost, setnextPost] = useState();
   const [prevPost, setprevPost] = useState();
-  const [randomPost, setRandomPost] = useState();
 
   const myContext = useContext(AppContext);
   const projectList = myContext.projectList;
   const info = myContext.siteSettings;
 
+  const [combinedStickers, setCombinedStickers] = useState([]);
+
+  const [randomPost, setRandomPost] = useState();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+
+    if (myContext.projectList.length > 0) {
+      setRandomPost(
+        myContext.projectList[
+          Math.floor(Math.random() * myContext.projectList.length)
+        ]
+      );
+    }
+  }, [slug, myContext.projectList]);
+
   useEffect(() => {
     sanityClient
       .fetch(
-        `*[_type == "project" && slug.current == "${slug}"]{ title, location, subtitle, slug,year,date, backgroundImage{asset->{url}}, mainImage, maincolor, detailcolor, popup, popupsarray[]{position,delay, image, title, url, project->{slug}, useProject, textcolor, maincolor, backgroundimage}, stickerarray, subtitle, textcolor, categories[]->{title, slug, color},${pageBuilderquerystring}} `
+        `*[_type == "project" && slug.current == "${slug}"]{ title, location, subtitle, slug,year,date, backgroundImage{asset->{url}}, mainImage, mainSticker, maincolor, detailcolor, popup, popupsarray[]{position,delay, image, title, url, project->{slug}, useProject, textcolor, maincolor, backgroundimage}, stickerarray, stickerAmount, subtitle, textcolor, categories[]->{title, slug, color},${pageBuilderquerystring}} `
       )
       .then((data) => {
         setProject(data[0]);
         myContext.updatePageTitle(data[0].title);
 
-        console.log("project", data[0], projectList);
+        const _combinedStickers = (() => {
+          const limit = data[0].stickerAmount ?? 10;
+
+          const primary = Array.isArray(data[0].stickerarray)
+            ? data[0].stickerarray
+            : [];
+          const fallback = Array.isArray(info?.stickerarray)
+            ? info.stickerarray
+            : [];
+
+          const neededFromFallback = Math.max(0, limit - primary.length);
+
+          return [
+            ...primary.slice(0, limit),
+            ...fallback.slice(0, neededFromFallback),
+          ];
+        })();
+
+        setCombinedStickers(_combinedStickers);
 
         for (let index = 0; index < projectList.length; index++) {
           if (
@@ -45,10 +78,6 @@ export default function SinglePost() {
             setprevPost(projectList[index - 1]);
           }
         }
-
-        setRandomPost(
-          projectList[Math.floor(Math.random() * projectList.length)]
-        );
 
         if (data[0].backgroundImage && data[0].backgroundImage.asset.url) {
           document.documentElement.style.setProperty(
@@ -102,6 +131,7 @@ export default function SinglePost() {
     info.maincolor.hex,
     myContext,
     info.textcolor.hex,
+    info.stickerarray,
   ]);
 
   if (!project) return <Loader />;
@@ -115,10 +145,8 @@ export default function SinglePost() {
             image={project.mainImage && project.mainImage.mainImage.asset.url}
           />
 
-          {project.stickerarray ? (
-            <Stickers stickerArray={project.stickerarray} />
-          ) : (
-            info.stickerarray && <Stickers stickerArray={info.stickerarray} />
+          {combinedStickers.length > 0 && (
+            <Stickers stickerArray={combinedStickers} />
           )}
 
           {project.mainImage && (
@@ -138,6 +166,7 @@ export default function SinglePost() {
                 <p>{project.location}</p>
                 <p>{project.subtitle}</p>
               </div>
+              <Frame />
             </div>
             {project.pageBuilder && (
               <PageBuilder pageBuilder={project.pageBuilder} />
