@@ -104,7 +104,8 @@ function PageBlock({ pageBlock }) {
                         ? "/projects/" +
                           listicle.linkTarget.project.slug.current
                         : listicle.linkTarget.category
-                        ? "/" + listicle.linkTarget.category.slug.current
+                        ? "/category/" +
+                          listicle.linkTarget.category.slug.current
                         : listicle.linkTarget.url
                         ? "/" + listicle.linkTarget.url
                         : "/"

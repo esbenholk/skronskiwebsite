@@ -11,7 +11,7 @@ export default function MenuItem({ menuItem, clickHandler }) {
             : menuItem.linkTarget.project
             ? "/projects/" + menuItem.linkTarget.project.slug.current
             : menuItem.linkTarget.category
-            ? "/" + menuItem.linkTarget.category.slug.current
+            ? "/category/" + menuItem.linkTarget.category.slug.current
             : menuItem.linkTarget.url
             ? "/" + menuItem.linkTarget.url
             : "/"
