@@ -134,7 +134,7 @@ export const Stickers = ({ stickerArray }) => {
       .slice(0, 10)
       .map((item, index) => {
         const size =
-          width > 786 ? getRandomInt(100, 300) : getRandomInt(70, 150);
+          width > 786 ? getRandomInt(50, 300) : getRandomInt(70, 150);
 
         const imgUrl = urlFor(item.asset).width(size).url();
         const edge = chooseRandomEdge();

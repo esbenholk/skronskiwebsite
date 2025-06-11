@@ -13,7 +13,6 @@ import { Stickers } from "./frame";
 
 export default function Category() {
   const { slug } = useParams();
-
   const [singlePage, setSinglePage] = useState();
   const myContext = useContext(AppContext);
   const info = myContext.siteSettings;

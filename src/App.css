@@ -119,6 +119,9 @@ a {
   gap: calc(var(--regMargin) * 2);
   padding-bottom: calc(var(--regMargin) * 6);
 }
+.catContainer {
+  min-height: 100vh;
+}
 .pageBuilderContent {
   display: flex;
   flex-direction: column;
@@ -625,6 +628,10 @@ img {
   border: 2px solid var(--text-color);
 }
 
+.standard-button {
+  z-index: 2;
+}
+
 /* 🎯 Specific layer-based sticker z-index (optional override if needed) */
 .fg-sticker {
   z-index: 3;
@@ -865,9 +872,7 @@ img {
     padding: calc(var(--regMargin) * 1);
     padding-bottom: calc(var(--regMargin) * 6);
   }
-  .catContainer {
-    min-height: 100vh;
-  }
+
   .logoContainer {
     max-width: 100%;
     display: flex;
