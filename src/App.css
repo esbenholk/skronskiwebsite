@@ -64,7 +64,7 @@ a {
   pointer-events: none;
   transform: translate(-50%, -50%);
   transition: all 0.05s linear;
-  z-index: 99999999999999999999999999999999999;
+  z-index: 99999999999;
   filter: brightness(1.5) saturate(150%) contrast(200%)
     drop-shadow(0 0 4px var(--detail-color));
   mix-blend-mode: exclusion; /* Blends cursor with background */

@@ -29,7 +29,7 @@ const Frame = () => {
         height: "105%",
         pointerEvents: "none",
         objectFit: "cover",
-        zIndex: 1,
+        zIndex: 0,
       }}
     >
       <SVG
