@@ -5,6 +5,24 @@ import { motion } from "framer-motion";
 import useWindowDimensions from "./functions/useWindowDimensions";
 import AppContext from "../globalState";
 
+// function InlineSvg({ url, className }) {
+//   const [svgContent, setSvgContent] = useState(null);
+
+//   useEffect(() => {
+//     fetch(url)
+//       .then((res) => res.text())
+//       .then(setSvgContent)
+//       .catch((err) => console.error("Failed to load SVG:", err));
+//   }, [url]);
+
+//   return (
+//     <div
+//       className={className}
+//       dangerouslySetInnerHTML={{ __html: svgContent }}
+//     />
+//   );
+// }
+
 const Frame = () => {
   const myContext = useContext(AppContext);
   const frameSvgs = myContext.frames;
@@ -35,9 +53,13 @@ const Frame = () => {
       <SVG
         src={randomSvg}
         style={{ width: "100%", height: "100%", display: "block" }}
-        preProcessor={(code) =>
-          code.replace(/<svg/, '<svg preserveAspectRatio="none"')
-        }
+        preProcessor={(code) => {
+          const cleaned = code
+            .replace(/<svg/, '<svg preserveAspectRatio="none"')
+            .replace(/fill="[^"]*"/g, ""); // Remove hardcoded fill attributes
+          return cleaned;
+        }}
+        className="framecolor"
       />
     </div>
   );

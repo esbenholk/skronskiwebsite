@@ -1,1 +1,3 @@
+# Allow Netlify/Let's Encrypt to access ACME challenge files
+/.well-known/*   /:splat   200
 /*    /index.html   200

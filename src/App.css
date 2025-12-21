@@ -1018,6 +1018,7 @@ img {
   z-index: 1;
 } */
 
+.framecolor,
 svg path {
   fill: var(--detail-color);
 }
