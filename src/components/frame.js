@@ -186,7 +186,7 @@ export const Stickers = ({ stickerArray }) => {
             width: `${sticker.size}px`,
             height: `${sticker.size}px`,
             pointerEvents: "none",
-            zIndex: 1,
+            zIndex: -9,
             // transform: `translate(${scrollYProgress * 100}, 0)`,
 
             // scaleX: scrollYProgress,
