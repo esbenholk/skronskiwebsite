@@ -23,7 +23,7 @@ export function Image(props) {
   const givenclassname = props.givenclassname;
   return (
     <>
-      {image && (
+      {image && image.asset && (
         <div className="centerimg">
           <LazyLoadImage
             loading="lazy"
@@ -102,7 +102,7 @@ export function TapeImage(props) {
             : null,
       }}
     >
-      {image && (
+      {image && image.asset && (
         <>
           <LazyLoadImage
             loading="lazy"
